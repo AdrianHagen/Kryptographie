@@ -1,7 +1,7 @@
 import tkinter as tk
 
-def zaehle_buchstaben():
-    text = eingabefeld.get()
+def count_letters():
+    text = inputbox.get().lower()
 
     buchstaben_dict = {}
 
@@ -12,27 +12,32 @@ def zaehle_buchstaben():
             else:
                 buchstaben_dict[char] = 1
 
-    ausgabefeld.delete("1.0", tk.END)
-    ausgabefeld.insert(tk.END, "Buchstaben im Text:\n")
+    outputbox_list.delete("1.0", tk.END)
+    outputbox_list.insert(tk.END, "Buchstaben im Text:\n")
     sorted_buchstaben_dict = dict(sorted(buchstaben_dict.items(), key=lambda x:x[1], reverse=True))
+    
+    total_number_letters = len(text.replace(" ", ""))
+    index_of_coincidence = 0
+    
     for buchstabe, anzahl in sorted_buchstaben_dict.items():
-        ausgabefeld.insert(tk.END, buchstabe + " : " + str(anzahl) + "\n")
+        outputbox_list.insert(tk.END, buchstabe + " : " + str(anzahl) + "\n")
+        index_of_coincidence += (anzahl/total_number_letters) ** 2
 
-# GUI erstellen
+    outputbox_idx.insert(tk.END, "Koinzidenzindex = " + str(index_of_coincidence))    
+
 fenster = tk.Tk()
 fenster.title("Buchstaben zählen")
 
-# Eingabefeld erstellen
-eingabefeld = tk.Entry(fenster, width=50)
-eingabefeld.pack(padx=10, pady=10)
+inputbox = tk.Entry(fenster, width=50)
+inputbox.pack(padx=10, pady=10)
 
-# Button erstellen
-button = tk.Button(fenster, text="Zähle Buchstaben", command=zaehle_buchstaben)
+button = tk.Button(fenster, text="Zähle Buchstaben", command=count_letters)
 button.pack(padx=10, pady=5)
 
-# Ausgabefeld erstellen
-ausgabefeld = tk.Text(fenster, width=50, height=10)
-ausgabefeld.pack(padx=50, pady=50)
+outputbox_list = tk.Text(fenster, width=50, height=20)
+outputbox_list.pack(padx=50, pady=50)
 
-# GUI starten
+outputbox_idx = tk.Text(fenster, width=50, height=1)
+outputbox_idx.pack(padx=10, pady=10)
+
 fenster.mainloop()
